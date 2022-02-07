@@ -1,8 +1,10 @@
-import { generateActiveToken } from './../config/generateToken';
+import { generateAccessToken } from './../config/generateToken';
 import { Request, Response } from 'express';
 import Users from '../models/userModel';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+
+const CLIENT_URL = `${process.env.BASE_URL}`;
 
 const authController = {
   register: async (req: Request, res: Response) => {
@@ -23,9 +25,18 @@ const authController = {
         password: passwordHash,
       };
 
-      const active_token = generateActiveToken({newUser});
+      const access_token = generateAccessToken({ newUser });
 
-      res.json({ status: 'OK', message: 'Успешная регистрация', data: newUser, active_token });
+      const user = new Users(newUser);
+
+      await user.save();
+
+      res.json({
+        status: 'OK',
+        msg: 'Register successfully.',
+        data: newUser,
+        access_token,
+      });
     } catch (error: any) {
       return res.status(500).json({ message: error.message });
     }
