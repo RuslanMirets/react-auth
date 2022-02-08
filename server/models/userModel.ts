@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { IUser } from '../config/interface';
 
 const userSchema = new mongoose.Schema(
   {
@@ -8,9 +9,9 @@ const userSchema = new mongoose.Schema(
       trim: true,
       maxLength: [20, 'Ваше имя может содержать до 20 символов'],
     },
-    account: {
+    email: {
       type: String,
-      required: [true, 'Пожалуйста, добавьте свой адрес электронной почты или телефон'],
+      required: [true, 'Пожалуйста, добавьте свой адрес электронной почты'],
       trim: true,
       unique: true,
     },
@@ -26,11 +27,11 @@ const userSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      defaul: 'user', // admin
+      default: 'user', // admin
     },
     type: {
       type: String,
-      defaul: 'normal', // fast
+      default: 'register', // login
     },
   },
   {
@@ -38,4 +39,4 @@ const userSchema = new mongoose.Schema(
   },
 );
 
-export default mongoose.model('User', userSchema);
+export default mongoose.model<IUser>('User', userSchema);

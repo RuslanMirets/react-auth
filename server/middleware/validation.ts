@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 
 export const validRegister = async (req: Request, res: Response, next: NextFunction) => {
-  const { name, account, password } = req.body;
+  const { name, email, password } = req.body;
 
   const errors = [];
 
@@ -11,12 +11,10 @@ export const validRegister = async (req: Request, res: Response, next: NextFunct
     errors.push('Ваше имя может содержать до 20 символов');
   }
 
-  if (!account) {
-    return res
-      .status(400)
-      .json({ msg: 'Пожалуйста, добавьте свой адрес электронной почты или номер телефона' });
-  } else if (!validPhone(account) && !validateEmail(account)) {
-    errors.push('Неверный формат электронной почты или номера телефона');
+  if (!email) {
+    return res.status(400).json({ msg: 'Пожалуйста, добавьте свой адрес электронной почты' });
+  } else if (!validateEmail(email)) {
+    errors.push('Неверный формат электронной почты');
   }
 
   if (password.length < 6) {
@@ -27,11 +25,6 @@ export const validRegister = async (req: Request, res: Response, next: NextFunct
 
   next();
 };
-
-export function validPhone(phone: string) {
-  const re = /^[+]/g;
-  return re.test(phone);
-}
 
 export function validateEmail(email: string) {
   const re =
