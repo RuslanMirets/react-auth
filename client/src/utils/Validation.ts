@@ -1,9 +1,8 @@
-import { Request, Response, NextFunction } from 'express';
+import { IUserRegister } from './TypeScript';
 
-export const validRegister = async (req: Request, res: Response, next: NextFunction) => {
-  const { name, email, password } = req.body;
-
-  const errors = [];
+export const validateRegister = (userRegister: IUserRegister) => {
+  const { name, email, password } = userRegister;
+  const errors: string[] = [];
 
   if (!name) {
     errors.push('Пожалуйста, добавьте свое имя');
@@ -21,9 +20,10 @@ export const validRegister = async (req: Request, res: Response, next: NextFunct
     errors.push('Пароль должен содержать не менее 6 символов');
   }
 
-  if (errors.length > 0) return res.status(400).json({ message: errors });
-
-  next();
+  return {
+    errorMessage: errors,
+    errorLength: errors.length,
+  };
 };
 
 export function validateEmail(email: string) {

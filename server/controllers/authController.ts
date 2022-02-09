@@ -31,7 +31,7 @@ const authController = {
 
       res.json({
         status: 'OK',
-        msg: 'Успешная регистрация',
+        message: 'Успешная регистрация',
         data: newUser,
         access_token,
       });
